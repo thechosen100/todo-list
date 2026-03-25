@@ -40,16 +40,25 @@ body{
 }
 
 #themeSwitch{
-    /* height: 80px; */
-    width: 80px;
+    display: flex;
+    justify-content: space-between;
+    height: 45pt;
+    width: 100pt;
     padding: 10px;
     border: none;
-    border-radius: 50%;
+    border-radius: 50pt;
     background-color: var(--primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #101114;
+    
+}
+
+#themeIcon{
+    margin: auto;
+    padding: 7px;
+    border: 2px solid var(--background);
+    border-radius: 50%;
 }
 
 h2{
