@@ -1,5 +1,5 @@
 const todoForm = document.querySelector('form');
-const toDoInput = document.getElementById('toDoInput');
+const todoInput = document.getElementById('toDoInput');
 const todoListUL = document.getElementById('taskList');
 
 let theme = localStorage.getItem("theme");
@@ -29,7 +29,7 @@ for (let i = 0; i < filterValues.length; i++){
 }
 
 function addTodo(){
-    const todoText = toDoInput.value.trim();
+    const todoText = todoInput.value.trim();
     if (todoText.length > 0){
         const todoObject = {
             text: todoText,
