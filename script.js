@@ -1,14 +1,32 @@
 const todoForm = document.querySelector('form');
-const todoInput = document.getElementById('toDoInput');
+const toDoInput = document.getElementById('toDoInput');
 const todoListUL = document.getElementById('taskList');
 
+let theme = localStorage.getItem("theme");
+if (theme === "lightmode") {
+    document.body.classList.add("lightmode");
+}
+
 let allTodos = loadTodo();
+let currentFilter = "all";
 updateTodoList();
+
+document.querySelector('[data-filter="all"]').classList.add('active');
 
 todoForm.addEventListener('submit', function(e){
     e.preventDefault();
     addTodo();
 })
+
+const filterValues = document.querySelectorAll(".tablink");
+for (let i = 0; i < filterValues.length; i++){
+    filterValues[i].addEventListener("click", function(e){
+        filterValues.forEach(value => value.classList.remove('active'));
+        filterValues[i].classList.add('active');
+        currentFilter = e.target.dataset.filter;
+        updateTodoList();
+    })
+}
 
 function addTodo(){
     const todoText = toDoInput.value.trim();
@@ -25,10 +43,14 @@ function addTodo(){
 }
 
 function updateTodoList(todo){
-    todoListUL.innerHTML = "";
+    todoListUL.innerHTML = "";   
     allTodos.forEach((todo, todoIndex) => {
-        todoItem = createTodoItem(todo, todoIndex);
-        todoListUL.append(todoItem);
+        if (
+            currentFilter === "all" || (currentFilter === "active" && todo.completed === false) || (currentFilter === "completed" && todo.completed === true)
+        ) {
+            todoItem = createTodoItem(todo, todoIndex);
+            todoListUL.append(todoItem);
+        }
     })
 }
 
@@ -58,6 +80,7 @@ function createTodoItem(todo, todoIndex){
     checkbox.addEventListener("change", () => {
         allTodos[todoIndex].completed = checkbox.checked;
         saveTodo();
+        updateTodoList();
     })
     checkbox.checked = todo.completed;
     return todoLI
@@ -78,3 +101,15 @@ function deleteTodoItem(todoIndex){
     saveTodo();
     updateTodoList();
 }
+
+const toggleButton = document.getElementById("themeSwitch");
+toggleButton.addEventListener("click", () => {
+    document.body.classList.toggle("lightmode");
+
+    if (document.body.classList.contains("lightmode")) {
+        localStorage.setItem("theme", "lightmode");
+    } else {
+        localStorage.setItem("theme", "darkmode");
+    }
+})
+

@@ -6,6 +6,14 @@
     --text-color: #f9f9f9;
 }
 
+.lightmode{
+    --background: #f5f7fa;
+    --primary-color: #ffffff;
+    --secondary-color: #d1d5db;
+    --accent-color: #2563eb;
+    --text-color: #111827;
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -19,12 +27,29 @@ html{
 }
 
 body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16pt;
+    color: var(--text-color);
     min-height: 100vh;
     padding: 10px;
     background-color: var(--background);
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#themeSwitch{
+    /* height: 80px; */
+    width: 80px;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #101114;
 }
 
 h2{
@@ -79,6 +104,31 @@ form{
     color: var(--background);
     cursor: pointer;
 }
+
+.tab {
+    display: flex;
+    width: 65%;
+    margin: 15px 10px; 
+}
+
+.tablink{
+    font: inherit;
+    flex: 1;
+    text-align: center;
+    margin: 0 5px;
+    padding: 6px;
+    border-radius: 12px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: 2px solid var(--accent-color);
+}
+
+.tablink:hover, .tablink.active{
+    color: var(--primary-color);
+    background: var(--accent-color);
+    transition: 200ms ease;
+}
+
 
 .taskItems{
     margin-bottom: 10px;
