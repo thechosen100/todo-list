@@ -31,7 +31,7 @@ body{
     font-size: 16pt;
     color: var(--text-color);
     min-height: 100vh;
-    padding: 10px;
+    /* padding: 10px; */
     background-color: var(--background);
     display: flex;
     flex-direction: column;
@@ -39,30 +39,78 @@ body{
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-#themeSwitch{
-    display: flex;
-    justify-content: space-between;
-    height: 45pt;
-    width: 100pt;
-    padding: 10px;
-    border: none;
-    border-radius: 50pt;
+.topBar{
+    width: 100%;
     background-color: var(--primary-color);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.switch{
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input{
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider{
+    position: absolute;
+    cursor: pointer;
+    width: 60px;
+    height: 34px;
+    background-color: var(--secondary-color);
+    transition: 0.4s ease;
+    border-radius: 34px;
+}
+
+.slider .circle{
+    position: absolute;
+    top: 4px; left: 4px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
     display: flex;
     justify-content: center;
     align-items: center;
-    
+    transition: 0.4s ease;
 }
 
-#themeIcon{
-    margin: auto;
-    padding: 7px;
-    border: 2px solid var(--background);
-    border-radius: 50%;
+.switch input:checked + .slider .circle{
+    transform: translateX(26px);
+    background-color: var(--accent-color);
+}
+
+.circle .icon{
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    fill: var(--primary-color);
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.circle .sun{ opacity: 0; }
+.circle .moon{ opacity: 1; }
+
+.switch input:checked + .slider .circle .sun{ opacity: 1; }
+.switch input:checked + .slider .circle .moon{ opacity: 0; }
+
+
+.toDo{
+    padding: 0 10px 10px 10px;
 }
 
 h2{
-    margin-top: 100px;
+    margin-top: 40px;
     margin-bottom: 20px;
     font-size: 3rem;
     font-weight: 800;
@@ -79,7 +127,8 @@ h2{
     gap: 10px;
 }
 
-#toDoInput{
+#toDoInput,
+.editInput{
     box-sizing: border-box;
     padding: 12px 20px;
     width: 100%;
@@ -91,7 +140,48 @@ h2{
     caret-color: var(--accent-color);
 }
 
-#toDoInput:focus{
+.editInput{
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 1000px;
+    border: 2px solid var(--secondary-color);
+    background: none;
+    color: var(--text-color);
+    font: inherit;
+    outline: none;
+}
+
+.saveButton{
+    margin-left: 10px;
+    padding: 10px 16px;
+    border-radius: 1000px;
+    border: none;
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    font: inherit;
+    cursor: pointer;
+    transition: 200ms ease;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to { 
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.saveButton:hover{
+    opacity: 0.8;
+}
+
+
+#toDoInput:focus, 
+.editInput:focus{
     outline: none;
 }
 
@@ -141,11 +231,13 @@ form{
 
 .taskItems{
     margin-bottom: 10px;
-    padding: 0 16px;
+    padding: 8px 16px;
     background-color: var(--primary-color);
     border-radius: 15px;
     display: flex;
     align-items: center;
+    transition: all 0.2s ease;
+    gap: 10px;
 }
 
 .taskItems .itemText{
@@ -155,7 +247,7 @@ form{
     transition: 200ms ease;
 }
 
-.deleteButton{
+.editButton, .deleteButton{
     padding: 3px;
     background: none;
     border: none;
@@ -165,12 +257,16 @@ form{
     cursor: pointer;
 }
 
-.deleteButton svg{
+.editButton svg, .deleteButton svg{
     transition: 200ms ease;
 }
 
 .deleteButton:hover svg{
     fill: #ff0033
+}
+
+.editButton:hover svg{
+    fill: var(--accent-color);
 }
 
 .custom-checkbox{

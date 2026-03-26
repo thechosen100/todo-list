@@ -2,10 +2,23 @@ const todoForm = document.querySelector('form');
 const todoInput = document.getElementById('toDoInput');
 const todoListUL = document.getElementById('taskList');
 
+const toggleButton = document.getElementById("themeSwitch");
+
 let theme = localStorage.getItem("theme");
 if (theme === "lightmode") {
     document.body.classList.add("lightmode");
+    toggleButton.checked = true;
 }
+
+toggleButton.addEventListener("click", () => {
+    document.body.classList.toggle("lightmode");
+
+    if (document.body.classList.contains("lightmode")) {
+        localStorage.setItem("theme", "lightmode");
+    } else {
+        localStorage.setItem("theme", "darkmode");
+    }
+})
 
 let allTodos = loadTodo();
 let currentFilter = "all";
@@ -67,6 +80,9 @@ function createTodoItem(todo, todoIndex){
     <label for="${todoID}" class="itemText">
         ${todoText}
     </label>
+    <button class="editButton">
+    <svg fill="var(--secondary-color)" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
+    </button>
     <button class="deleteButton">
         <svg fill="var(--secondary-color)" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
     </button>
@@ -74,6 +90,12 @@ function createTodoItem(todo, todoIndex){
     const deleteButton = todoLI.querySelector(".deleteButton");
     deleteButton.addEventListener("click", () => {
         deleteTodoItem(todoIndex);
+    })
+
+    const editButton = todoLI.querySelector(".editButton");
+    editButton.addEventListener("click", () => {
+        console.log("Edit button clicked");
+        editTodoItem(todoLI, todoIndex);
     })
 
     const checkbox = todoLI.querySelector("input");
@@ -102,14 +124,35 @@ function deleteTodoItem(todoIndex){
     updateTodoList();
 }
 
-const toggleButton = document.getElementById("themeSwitch");
-toggleButton.addEventListener("click", () => {
-    document.body.classList.toggle("lightmode");
+function editTodoItem(todoLI, todoIndex){
+    //need to make changes here right now
+    //ionno what the logic is
+    //convert the checkbox whos edit button is clicked into a text input with "change" button at the end
+    const todo = allTodos[todoIndex];
 
-    if (document.body.classList.contains("lightmode")) {
-        localStorage.setItem("theme", "lightmode");
-    } else {
-        localStorage.setItem("theme", "darkmode");
-    }
-})
+    todoLI.innerHTML = `
+    <input type="text" class="editInput" value="${todo.text}">
+    <button class="saveButton">Save</button>
+    `
 
+    const input = todoLI.querySelector(".editInput");
+    const saveButton = todoLI.querySelector(".saveButton");
+
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+
+    saveButton.addEventListener("click", () => {
+        const newText = input.value.trim();
+        if (newText.length > 0) {
+            allTodos[todoIndex].text = newText;
+            saveTodo();
+            updateTodoList();
+        }
+    });
+
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            saveButton.click();
+        }
+    });
+}
